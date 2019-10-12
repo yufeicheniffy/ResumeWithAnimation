@@ -1,5 +1,5 @@
 //简历正文
-var markdownText1=`
+var markdownText1 = `
 # 简历
 这是我的简历
 这是我的简历
@@ -24,15 +24,6 @@ var markdownText1=`
 这是我的简历
 这是我的简历
 `
-
-mainProgram(10);
-
-function mainProgram(timeout) {
-    writeCode(codeTextS1, '',timeout).then(() => {
-        preparePaper();
-        return writeCode(codeTextS2,codeTextS1,timeout);
-    }).then(()=>{return writeMarkdown(markdownText1,timeout)})
-}
 
 //code
 var codeTextS1 = `
@@ -65,10 +56,14 @@ var codeTextS2 = `
     height:100%;
     position:fixed;
     }
-#codeDisplay{ 
+#codeDisplay{
     margin:1em;
     padding:1em;
     height:100%;
+    -webkit-transition: none;
+    transition: none;
+    -webkit-transform: rotateY(10deg) translateZ(-100px) ;
+    transform: rotateY(10deg) translateZ(-100px) ;
     }
 #paperContainer{
     right:1em;
@@ -83,8 +78,19 @@ var codeTextS2 = `
 /**/
 `
 
+mainProgram(10);
+
+function mainProgram(timeout) {
+    writeCode(codeTextS1, '', timeout).then(() => {
+        preparePaper();
+        return writeCode(codeTextS2, codeTextS1, timeout);
+    }).then(() => {
+        return writeMarkdown(markdownText1, timeout)
+    })
+}
+
 // 将code写入animationStyle和codeDisplay
-function writeCode(codeText, preCode,timeout) {
+function writeCode(codeText, preCode, timeout) {
     return new Promise(function (resolve) {
         let n = 0;
         let clockId = setInterval(() => {
@@ -114,23 +120,24 @@ function preparePaper() {
 }
 
 //书写markdown
-function writeMarkdown(markdownText,timeout){
+function writeMarkdown(markdownText, timeout) {
     return new Promise(function (resolve) {
-        let n=0;
-        let paperElement=document.getElementById('paper');
-        let clockId=setInterval(()=>{
-            n+=1;
-            paperElement.innerHTML+=Prism.highlight(markdownText.slice(n-1,n), Prism.languages.markdown, 'markdown');
-            if(n>=markdownText.length){
+        let n = 0;
+        let paperElement = document.getElementById('paper');
+        let clockId = setInterval(() => {
+            n += 1;
+            paperElement.innerHTML += Prism.highlight(markdownText.slice(n - 1, n), Prism.languages.markdown, 'markdown');
+            if (n >= markdownText.length) {
                 window.clearInterval(clockId);
-                paperElement.innerHTML=markdownToHTML(markdownText);
+                paperElement.innerHTML = markdownToHTML(markdownText);
                 resolve();
             }
-        },timeout)
+        }, timeout)
 
     })
 }
+
 function markdownToHTML(markdownText) {
     var converter = new showdown.Converter();
-    return  converter.makeHtml(markdownText);
+    return converter.makeHtml(markdownText);
 }
