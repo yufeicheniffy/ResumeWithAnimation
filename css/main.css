@@ -1,4 +1,5 @@
 .token.selector{ color:black;}
 .token.property{ color:black;}
 .token.function{ color:black;}
-
+p,li {white-space: normal}
+#paper {overflow: auto; padding: 2em;}
